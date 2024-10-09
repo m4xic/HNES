@@ -703,6 +703,7 @@ var HN = {
 
         HN.initElements();
         HN.removeNumbers();
+        HN.linksNewTab();
 
         if (/*window.location.pathname != '/submit' &&*/
             window.location.pathname != '/changepw') {
@@ -1439,6 +1440,24 @@ var HN = {
 
     removeNumbers: function() {
       $('td[align="right"]').remove();
+    },
+
+    // m4xic 09/10/2024: force all external links to open in a new tab
+    linksNewTab: function() {
+        $('a').each(function() {
+            var link = $(this).attr('href');
+            
+            // Ensure the href exists and isn't empty or a hash
+            if (link && link.indexOf('#') !== 0 && link.indexOf('mailto:') !== 0 && link.indexOf('tel:') !== 0) {
+                var hostname = $('<a>').prop('href', link).prop('hostname');
+                
+                // If the hostname exists and is different from the current location's hostname
+                if (hostname && hostname !== window.location.hostname) {
+                    $(this).attr('target', '_blank');
+                    console.log(link);
+                }
+            }
+        });
     },
 
     formatScore: function() {
